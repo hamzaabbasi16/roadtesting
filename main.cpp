@@ -59,8 +59,8 @@ void Map :: load_data_from_file(std::string file_name)
 	if(f)
 	{
 		std::ostringstream ss;
-	  ss << f.rdbuf(); // reading data
-	  json = ss.str();
+	  	ss << f.rdbuf(); // reading data
+	  	json = ss.str();
 	}
 	picojson::value v;
 	std::string err;
@@ -71,35 +71,35 @@ void Map :: load_data_from_file(std::string file_name)
 	}
 	auto all_roads = v.get("roads").get<array>();
 	for(int i=0; i<2; i++)
-  {
+	{
 		Road road;
-	  auto all_lanes = all_roads[i].get("lanes").get<array>();
-	  std::vector<Lane> l;
-    for(int j=0; j<2; j++)
-    {
+	  	auto all_lanes = all_roads[i].get("lanes").get<array>();
+	  	std::vector<Lane> l;
+    		for(int j=0; j<2; j++)
+    		{
 			Lane lane;
 			std::vector<double> tmp_points;
 			std::vector<std::vector<double>> vec;
 			auto all_points = all_lanes[j].get("centre_point").get<array>();
-      for(int k=0; k<720; k++)
-      {
+      			for(int k=0; k<720; k++)
+      			{
 				tmp_points.push_back(all_points[k].get<array>()[0].get<double>());
-		  	tmp_points.push_back(all_points[k].get<array>()[1].get<double>());
-		    vec.push_back(tmp_points);
-      }
+		  		tmp_points.push_back(all_points[k].get<array>()[1].get<double>());
+		    		vec.push_back(tmp_points);
+      			}
 			lane.set_centre_point(vec);
 			lane.set_id(all_lanes[j].get("id").get<double>());
 			lane.set_left_boundary_id(all_lanes[j].get("left_boundary_id").get<double>());
 			lane.set_right_boundary_id(all_lanes[j].get("right_boundary_id").get<double>());
-      // fill other lane data
+      			// fill other lane data
 		 	l.push_back(lane);
 		 }
-		 road.set_id( all_roads[i].get("id").get<double>() );
-	   road.set_left_boundary_id( all_roads[i].get("left_boundary_id").get<double>() );
-	   road.set_right_boundary_id( all_roads[i].get("right_boundary_id").get<double>() );
-	   road.set_lanes( l );
-	   // fill other road data
-     roads_.push_back(road);
+		road.set_id( all_roads[i].get("id").get<double>() );
+	   	road.set_left_boundary_id( all_roads[i].get("left_boundary_id").get<double>() );
+	   	road.set_right_boundary_id( all_roads[i].get("right_boundary_id").get<double>() );
+	   	road.set_lanes( l );
+	   	// fill other road data
+     		roads_.push_back(road);
 	 }
  }
 
