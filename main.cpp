@@ -94,14 +94,14 @@ void Map :: load_data_from_file(std::string file_name)
       			// fill other lane data
 		 	l.push_back(lane);
 		 }
-		road.set_id( all_roads[i].get("id").get<double>() );
-	   	road.set_left_boundary_id( all_roads[i].get("left_boundary_id").get<double>() );
-	   	road.set_right_boundary_id( all_roads[i].get("right_boundary_id").get<double>() );
-	   	road.set_lanes( l );
-	   	// fill other road data
-     		roads_.push_back(road);
+		 road.set_id( all_roads[i].get("id").get<double>() );
+	   	 road.set_left_boundary_id( all_roads[i].get("left_boundary_id").get<double>() );
+	   	 road.set_right_boundary_id( all_roads[i].get("right_boundary_id").get<double>() );
+	   	 road.set_lanes( l );
+	   	 // fill other road data
+     		 roads_.push_back(road);
 	 }
- }
+}
 
 int main()
 {
