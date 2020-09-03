@@ -1,3 +1,8 @@
+#ifndef LANE_H
+#define LANE_H
+
+#include<vector>
+	
 class Lane
 {
 	float id;
@@ -11,10 +16,6 @@ public:
 	float get_right_boundary_id(){return right_boundary_id;}
 	std::vector<std::vector<double>> get_centre_point(){return centre_point;}
 };
-Lane :: Lane(float a, float b, float c, std::vector<std::vector<double>> d)
-{
-	id = a;
-	left_boundary_id = b;
-	right_boundary_id = c;
-	centre_point = d;
-}
+
+
+#endif
