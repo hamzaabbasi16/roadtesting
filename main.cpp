@@ -24,14 +24,17 @@ struct Road
 	float right_boundary_id;
 	std::vector<Lane> lanes;
 };
-struct Map
+class Map
 {
-	std::vector<Road> roads;
+	std::vector<Road> roads_;
+public:
+	void load_data_from_file(std::string file_name);
+	float get_road2_id(){return roads_[0].lanes[0].centre_point[0][1];}
 };
-int main()
+void Map :: load_data_from_file(std::string file_name)
 {
 	// pre processing
-	std::ifstream f("map.json"); //taking file as inputstream
+	std::ifstream f(file_name); //taking file as inputstream
 	std::string json;
 	if(f) 
 	{
@@ -47,86 +50,40 @@ int main()
 	 {
 	 	std::cerr << err << std::endl;
 	 }
-	 
-	// ********** Loading Lane 1 data**************
-	Lane lane_1;
-	lane_1.id =  v.get("roads").get<array>()[0].get("lanes").get<array>()[0].get("id").get<double>();
-	lane_1.left_boundary_id = v.get("roads").get<array>()[0].get("lanes").get<array>()[0].get("left_boundary_id").get<double>();
-	lane_1.right_boundary_id = v.get("roads").get<array>()[0].get("lanes").get<array>()[0].get("right_boundary_id").get<double>();
-	
-	for(int i = 0; i < 720; i++)
-	{	std::vector<double> vec;
-	       	auto json_point = v.get("roads").get<array>()[0].get("lanes").get<array>()[0].get("centre_point").get<array>()[i];
-		vec.push_back(json_point.get<array>()[0].get<double>());
-		vec.push_back(json_point.get<array>()[1].get<double>());
-		//std::cout<<"x: "<<vec[0]<<", y: "<<vec[1]<<std::endl;
-		lane_1.centre_point.push_back(vec);
-	}
-	// ********** Loading Lane 2 data**************
-	Lane lane_2;
-	lane_2.id =  v.get("roads").get<array>()[0].get("lanes").get<array>()[1].get("id").get<double>();
-	lane_2.left_boundary_id = v.get("roads").get<array>()[0].get("lanes").get<array>()[1].get("left_boundary_id").get<double>();
-	lane_2.right_boundary_id = v.get("roads").get<array>()[0].get("lanes").get<array>()[1].get("right_boundary_id").get<double>();
-	
-	for(int i = 0; i < 720; i++)
-	{	std::vector<double> vec;
-	       	auto json_point = v.get("roads").get<array>()[0].get("lanes").get<array>()[1].get("centre_point").get<array>()[i];
-		vec.push_back(json_point.get<array>()[0].get<double>());
-		vec.push_back(json_point.get<array>()[1].get<double>());
-		//std::cout<<"x: "<<vec[0]<<", y: "<<vec[1]<<std::endl;
-		lane_2.centre_point.push_back(vec);
-	}
-	// ********** Loading Lane 3 data**************
-	Lane lane_3;
-	lane_3.id =  v.get("roads").get<array>()[1].get("lanes").get<array>()[0].get("id").get<double>();
-	lane_3.left_boundary_id = v.get("roads").get<array>()[1].get("lanes").get<array>()[0].get("left_boundary_id").get<double>();
-	lane_3.right_boundary_id = v.get("roads").get<array>()[1].get("lanes").get<array>()[0].get("right_boundary_id").get<double>();
-	
-	for(int i = 0; i < 720; i++)
-	{	std::vector<double> vec;
-	       	auto json_point = v.get("roads").get<array>()[1].get("lanes").get<array>()[0].get("centre_point").get<array>()[i];
-		vec.push_back(json_point.get<array>()[0].get<double>());
-		vec.push_back(json_point.get<array>()[1].get<double>());
-		//std::cout<<"x: "<<vec[0]<<", y: "<<vec[1]<<std::endl;
-		lane_3.centre_point.push_back(vec);
-	}
-	// ********** Loading Lane 4 data**************
-	Lane lane_4;
-	lane_4.id =  v.get("roads").get<array>()[1].get("lanes").get<array>()[1].get("id").get<double>();
-	lane_4.left_boundary_id = v.get("roads").get<array>()[1].get("lanes").get<array>()[1].get("left_boundary_id").get<double>();
-	lane_4.right_boundary_id = v.get("roads").get<array>()[1].get("lanes").get<array>()[1].get("right_boundary_id").get<double>();
-	
-	for(int i = 0; i < 720; i++)
-	{	std::vector<double> vec;
-	       	auto json_point = v.get("roads").get<array>()[1].get("lanes").get<array>()[1].get("centre_point").get<array>()[i];
-		vec.push_back(json_point.get<array>()[0].get<double>());
-		vec.push_back(json_point.get<array>()[1].get<double>());
-		//std::cout<<"x: "<<vec[0]<<", y: "<<vec[1]<<std::endl;
-		lane_4.centre_point.push_back(vec);
-	}
+	 auto all_roads = v.get("roads").get<array>();
+	 for(int i=0; i<2; i++)
+         {
+             Road road;
+	     auto all_lanes = all_roads[i].get("lanes").get<array>();
+             for(int j=0; j<2; j++)
+             {
+		Lane lane;
+		std::vector<double> tmp_points;
+		auto all_points = all_lanes[j].get("centre_point").get<array>();
+                for(int k=0; k<720; k++)
+                {
+		  tmp_points.push_back(all_points[k].get<array>()[0].get<double>());
+		  tmp_points.push_back(all_points[k].get<array>()[1].get<double>());
+		  lane.centre_point.push_back(tmp_points);
+                }
+		lane.id = all_lanes[j].get("id").get<double>();
+		lane.left_boundary_id = all_lanes[j].get("left_boundary_id").get<double>();
+		lane.right_boundary_id = all_lanes[j].get("right_boundary_id").get<double>();
+                // fill other lane data
+                road.lanes.push_back(lane);
+             }
+	     road.id =  all_roads[i].get("id").get<double>();
+	     road.left_boundary_id = all_roads[i].get("left_boundary_id").get<double>();
+	     road.right_boundary_id = all_roads[i].get("right_boundary_id").get<double>();	
+	     // fill other road data	
+             roads_.push_back(road);
+         }
+}
 
-	// ********** Loading the lanes to the road structure ***********
-
-	// ********** Loading Road 1 Structure ***************
-	Road road_1;
-	road_1.id =  v.get("roads").get<array>()[0].get("id").get<double>();
-	road_1.left_boundary_id = v.get("roads").get<array>()[0].get("left_boundary_id").get<double>();
-	road_1.right_boundary_id = v.get("roads").get<array>()[0].get("right_boundary_id").get<double>();
-	road_1.lanes.push_back(lane_1);
-	road_1.lanes.push_back(lane_2);
-	// ********** Loading Road 2 Structure ***************
-	Road road_2;
-	road_2.id =  v.get("roads").get<array>()[1].get("id").get<double>();
-	road_2.left_boundary_id = v.get("roads").get<array>()[1].get("left_boundary_id").get<double>();
-	road_2.right_boundary_id = v.get("roads").get<array>()[1].get("right_boundary_id").get<double>();
-	road_2.lanes.push_back(lane_3);
-	road_2.lanes.push_back(lane_4);
-
-
-	// ************ Loading the roads to the map structure **********
-	
+int main()
+{
 	Map map;
-	map.roads.push_back(road_1);
-	map.roads.push_back(road_2);
-
+	map.load_data_from_file("map.json");
+	std :: cout << map.get_road2_id();
+	
 }
