@@ -17,16 +17,19 @@ class Lane
 	float right_boundary_id;
 	std::vector<std::vector<double>> centre_point;
 public:
-	void set_id(float a){id = a;}
-	void set_left_boundary_id(float a){left_boundary_id = a;}
-	void set_right_boundary_id(float a){right_boundary_id = a;}
-	void set_centre_point(std::vector<std::vector<double>> a){centre_point = a;}
+	Lane(float a, float b, float c, std::vector<std::vector<double>> d);
 	float get_id(){return id;}
 	float get_left_boundary_id(){return left_boundary_id;}
 	float get_right_boundary_id(){return right_boundary_id;}
 	std::vector<std::vector<double>> get_centre_point(){return centre_point;}
 };
-
+Lane :: Lane(float a, float b, float c, std::vector<std::vector<double>> d)
+{
+	id = a;
+	left_boundary_id = b;
+	right_boundary_id = c;
+	centre_point = d;
+}
 class Road
 {
 	float id;
@@ -34,16 +37,19 @@ class Road
 	float right_boundary_id;
 	std::vector<Lane> lanes;
 public:
-	void set_id(float a){id = a;}
-	void set_left_boundary_id(float a){left_boundary_id = a;}
-	void set_right_boundary_id(float a){right_boundary_id = a;}
-	void set_lanes(std::vector<Lane> a){lanes = a;}
+	Road(float a, float b, float c, std::vector<Lane> d);
 	float get_id(){return id;}
 	float get_left_boundary_id(){return left_boundary_id;}
 	float get_right_boundary_id(){return right_boundary_id;}
 	std::vector<Lane> get_lanes(){return lanes;}
 };
-
+Road :: Road(float a, float b, float c, std::vector<Lane> d)
+{
+	id = a;
+	left_boundary_id = b;
+	right_boundary_id = c;
+	lanes = d;
+}
 class Map
 {
 	std::vector<Road> roads_;
@@ -70,14 +76,13 @@ void Map :: load_data_from_file(std::string file_name)
 		std::cerr << err << std::endl;
 	}
 	auto all_roads = v.get("roads").get<array>();
+	// Loading the map file 
 	for(int i=0; i<2; i++)
 	{
-		Road road;
 	  	auto all_lanes = all_roads[i].get("lanes").get<array>();
 	  	std::vector<Lane> l;
     		for(int j=0; j<2; j++)
     		{
-			Lane lane;
 			std::vector<double> tmp_points;
 			std::vector<std::vector<double>> vec;
 			auto all_points = all_lanes[j].get("centre_point").get<array>();
@@ -87,17 +92,19 @@ void Map :: load_data_from_file(std::string file_name)
 		  		tmp_points.push_back(all_points[k].get<array>()[1].get<double>());
 		    		vec.push_back(tmp_points);
       			}
-			lane.set_centre_point(vec);
-			lane.set_id(all_lanes[j].get("id").get<double>());
-			lane.set_left_boundary_id(all_lanes[j].get("left_boundary_id").get<double>());
-			lane.set_right_boundary_id(all_lanes[j].get("right_boundary_id").get<double>());
+			float tid = all_lanes[j].get("id").get<double>();
+			float tlb = all_lanes[j].get("left_boundary_id").get<double>();
+			float trb = all_lanes[j].get("left_boundary_id").get<double>();
+			std::vector<std::vector<double>> cp = vec;
+			Lane lane(tid, tlb, trb, cp);
       			// fill other lane data
 		 	l.push_back(lane);
 		 }
-		 road.set_id( all_roads[i].get("id").get<double>() );
-	   	 road.set_left_boundary_id( all_roads[i].get("left_boundary_id").get<double>() );
-	   	 road.set_right_boundary_id( all_roads[i].get("right_boundary_id").get<double>() );
-	   	 road.set_lanes( l );
+		 float tid = all_roads[i].get("id").get<double>();
+		 float tlb = all_roads[i].get("left_boundary_id").get<double>();
+		 float trb = all_roads[i].get("right_boundary_id").get<double>();
+		 std::vector<Lane> tl = l;
+		 Road road(tid, tlb, trb, tl);
 	   	 // fill other road data
      		 roads_.push_back(road);
 	 }
