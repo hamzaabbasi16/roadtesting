@@ -47,8 +47,7 @@ class Map
 	std::vector<Road> roads_;
 public:
 	void load_data_from_file(std::string file_name);
-	
-	float get_r1_l1_l_b_id(){return roads_[0].get_lanes()[0].get_left_boundary_id();}
+
 };
 void Map :: load_data_from_file(std::string file_name)
 {
@@ -106,6 +105,6 @@ void Map :: load_data_from_file(std::string file_name)
 int main()
 {
 	Map map;
-	map.load_data_from_file("map.json");
+	
 	
 }
