@@ -1,6 +1,5 @@
 #include "Map.h"
 #include "Lane.h"
-#include "Road.h"
 #include "picojson.h"
 #include <fstream>
 #include <sstream>
@@ -28,9 +27,8 @@ void Map :: load_data_from_file(std::string file_name)
 	{
 		std::cerr << err << std::endl;
 	}
-
 	auto all_roads = v.get("roads").get<array>();
-	// Loading the map file
+	// Loading the map file 
 	for(int i=0; i<2; i++)
 	{
 	  	auto all_lanes = all_roads[i].get("lanes").get<array>();
@@ -60,8 +58,6 @@ void Map :: load_data_from_file(std::string file_name)
 		 std::vector<Lane> tl = l;
 		 Road road{tid, tlb, trb, tl};
 	   	 // fill other road data
-         roads_.push_back(road);
-
+     		 roads_.push_back(road);
 	 }
 }
-
