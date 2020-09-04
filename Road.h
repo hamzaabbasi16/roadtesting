@@ -1,9 +1,7 @@
 #ifndef ROAD_H
 #define ROAD_H
-
 #include <vector>
 #include "Lane.h"
-
 class Road
 {
 	float id;
@@ -17,5 +15,4 @@ public:
 	float get_right_boundary_id(){return right_boundary_id;}
 	std::vector<Lane> get_lanes(){return lanes;}
 };
-
 #endif

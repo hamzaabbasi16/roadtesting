@@ -1,21 +1,18 @@
 #include "Map.h"
 #include "Lane.h"
+#include "Road.h"
 #include "picojson.h"
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
-
 using namespace picojson;
-
-
 void Map :: load_data_from_file(std::string file_name)
 {
-	// pre processing
 	std::ifstream f(file_name); //taking file as inputstream
 	std::string json;
 	if(f)
-	{
+	{ 
 		std::ostringstream ss;
 	  	ss << f.rdbuf(); // reading data
 	  	json = ss.str();
@@ -28,7 +25,6 @@ void Map :: load_data_from_file(std::string file_name)
 		std::cerr << err << std::endl;
 	}
 	auto all_roads = v.get("roads").get<array>();
-	// Loading the map file 
 	for(int i=0; i<2; i++)
 	{
 	  	auto all_lanes = all_roads[i].get("lanes").get<array>();
@@ -49,7 +45,6 @@ void Map :: load_data_from_file(std::string file_name)
 			float trb = all_lanes[j].get("left_boundary_id").get<double>();
 			std::vector<std::vector<double>> cp = vec;
 			Lane lane{tid, tlb, trb, cp};
-      			// fill other lane data
 		 	l.push_back(lane);
 		 }
 		 float tid = all_roads[i].get("id").get<double>();
@@ -57,7 +52,8 @@ void Map :: load_data_from_file(std::string file_name)
 		 float trb = all_roads[i].get("right_boundary_id").get<double>();
 		 std::vector<Lane> tl = l;
 		 Road road{tid, tlb, trb, tl};
-	   	 // fill other road data
-     		 roads_.push_back(road);
+         roads_.push_back(road);
+
 	 }
 }
+
