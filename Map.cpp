@@ -9,11 +9,10 @@
 using namespace picojson;
 void Map :: load_data_from_file(std::string file_name)
 {
-	// pre processing
 	std::ifstream f(file_name); //taking file as inputstream
 	std::string json;
 	if(f)
-	{
+	{ 
 		std::ostringstream ss;
 	  	ss << f.rdbuf(); // reading data
 	  	json = ss.str();
