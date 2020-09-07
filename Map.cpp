@@ -40,7 +40,8 @@ void Map :: load_data_from_file(std::string file_name)
 		  		tmp_points.push_back(all_points[k].get<array>()[1].get<double>());
 		    		vec.push_back(tmp_points);
       			}
-            float tid = all_lanes[j].get("id").get<double>();
+			
+                        float tid = all_lanes[j].get("id").get<double>();
 			float tlb = all_lanes[j].get("left_boundary_id").get<double>();
 			float trb = all_lanes[j].get("left_boundary_id").get<double>();
 			//Getting Line Left Boundary Points
@@ -49,51 +50,51 @@ void Map :: load_data_from_file(std::string file_name)
 			auto left_points = all_lanes[j].get("left_boundary_points").get<array>();
       			for(int k=0; k<720; k++) // size_of(array of points)
       			{
-                    L_bdr_points.push_back(left_points[k].get<array>()[0].get<double>());
-                    L_bdr_points.push_back(left_points[k].get<array>()[1].get<double>());
-                    L_bdr_vec.push_back(L_bdr_points);
+			    L_bdr_points.push_back(left_points[k].get<array>()[0].get<double>());
+			    L_bdr_points.push_back(left_points[k].get<array>()[1].get<double>());
+			    L_bdr_vec.push_back(L_bdr_points);
       			}
 
-      		std::vector<double> R_bdr_points; //GettingLine Right Boundary Points
+      		       std::vector<double> R_bdr_points; //GettingLine Right Boundary Points
 			std::vector<std::vector<double>> R_bdr_vec;
 			auto right_points = all_lanes[j].get("left_boundary_points").get<array>();
       			for(int k=0; k<720; k++) // size_of(array of points)
       			{
-                    R_bdr_points.push_back(right_points[k].get<array>()[0].get<double>());
-                    R_bdr_points.push_back(right_points[k].get<array>()[1].get<double>());
-                    R_bdr_vec.push_back(R_bdr_points);
+			    R_bdr_points.push_back(right_points[k].get<array>()[0].get<double>());
+			    R_bdr_points.push_back(right_points[k].get<array>()[1].get<double>());
+			    R_bdr_vec.push_back(R_bdr_points);
       			}
-            std::vector<std::vector<double>> cp = vec;
+                        std::vector<std::vector<double>> cp = vec;
 			Lane lane{tid, tlb, trb, cp, L_bdr_vec, R_bdr_vec };
 		 	l.push_back(lane);
 		 }
-         float tid = all_roads[i].get("id").get<double>(); //Loading Road data
+                 float tid = all_roads[i].get("id").get<double>(); //Loading Road data
 		 float tlb = all_roads[i].get("left_boundary_id").get<double>();
 		 float trb = all_roads[i].get("right_boundary_id").get<double>();
 
-		    std::vector<double> L_bdr_points; //Getting Road Left Boundary Points
+		        std::vector<double> L_bdr_points; //Getting Road Left Boundary Points
 			std::vector<std::vector<double>> L_bdr_vec;
 			auto left_points = all_lanes[i].get("left_boundary_points").get<array>();
       			for(int k=0; k<720; k++) // size_of(array of points)
       			{
-                    L_bdr_points.push_back(left_points[k].get<array>()[0].get<double>());
-                    L_bdr_points.push_back(left_points[k].get<array>()[1].get<double>());
-                    L_bdr_vec.push_back(L_bdr_points);
+			    L_bdr_points.push_back(left_points[k].get<array>()[0].get<double>());
+			    L_bdr_points.push_back(left_points[k].get<array>()[1].get<double>());
+			    L_bdr_vec.push_back(L_bdr_points);
       			}
 
-      		std::vector<double> R_bdr_points; //Getting Road Right Boundary Points
+      		        std::vector<double> R_bdr_points; //Getting Road Right Boundary Points
 			std::vector<std::vector<double>> R_bdr_vec;
 			auto right_points = all_lanes[i].get("left_boundary_points").get<array>();
       			for(int k=0; k<720; k++) // size_of(array of points)
       			{
-                    R_bdr_points.push_back(right_points[k].get<array>()[0].get<double>());
-                    R_bdr_points.push_back(right_points[k].get<array>()[1].get<double>());
-                    R_bdr_vec.push_back(R_bdr_points);
+			    R_bdr_points.push_back(right_points[k].get<array>()[0].get<double>());
+			    R_bdr_points.push_back(right_points[k].get<array>()[1].get<double>());
+			    R_bdr_vec.push_back(R_bdr_points);
       			}
 
 		 std::vector<Lane> tl = l;
 		 Road road{tid, tlb, trb, L_bdr_vec, R_bdr_vec, tl, };
-         roads_.push_back(road);
+                 roads_.push_back(road);
 	 }
 }
 
